@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
+	
+	<!-- 所用的执行计划  -->
+	<bean id="allScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="startBetDateTrigger" />
+				<ref bean="stopBetDateTrigger" />
+				<!-- 胜负平 -->
+ 				<ref bean="startJzSfpTrigger" />
+				<ref bean="stopJzSfpTrigger" />
+				<!-- 进球数 -->
+				<ref bean="startJzJqsTrigger" />
+				<ref bean="stopJzJqsTrigger" />
+				<!-- 半全场 -->
+				<ref bean="startJzBqTrigger" />
+				<ref bean="stopJzBqTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+	
+    
+    <!-- 竞彩足球 每天比赛场数信息 start -->
+	<bean id="startBetDateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="betDateCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopBetDateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="betDateCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startBetDateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startBetDateJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+		<property name="group" value="[BetDate]" />
+		<property name="description" value="竞彩足球 每天比赛场数信息 [start]" />
+	</bean>
+	<bean id="stopBetDateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopBetDateJob" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+		<property name="group" value="[BetDate]" />
+		<property name="description" value="竞彩足球 每天比赛场数信息[stop]" />
+	</bean>
+	<!-- 竞彩足球 每天比赛场数信息 end --> 
+	 
+	
+	<!-- 竞足 胜负平 比赛信息  start -->
+	<bean id="startJzSfpMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzSfpCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopJzSfpMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzSfpCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startJzSfpTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startJzSfpMatchJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+		<property name="group" value="[JzSfp]" />
+		<property name="description" value="竞足 胜负平 比赛信息[start]" />
+	</bean>
+	<bean id="stopJzSfpTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopJzSfpMatchJob" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+		<property name="group" value="[JzSfp]" />
+		<property name="description" value="竞足 胜负平 比赛信息[end]" />
+	</bean>
+	<!-- 竞足 胜负平 比赛信息  end -->
+	
+	
+	<!-- 竞足 进球数 比赛信息  start -->
+	<bean id="startJzJqsMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzJqsCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopJzJqsMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzJqsCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startJzJqsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startJzJqsMatchJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+		<property name="group" value="[JzJqs]" />
+		<property name="description" value="竞足 进球数 比赛信息[start]" />
+	</bean>
+	<bean id="stopJzJqsTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopJzJqsMatchJob" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+		<property name="group" value="[JzJqs]" />
+		<property name="description" value="竞足 进球数 比赛信息[end]" />
+	</bean>
+	<!-- 竞足 进球数 比赛信息  end -->
+	
+	<!-- 竞足 半全场 比赛信息  start -->
+	<bean id="startJzBqMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzBqCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopJzBqMatchJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="jzBqCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startJzBqTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startJzBqMatchJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+		<property name="group" value="[JzBq]" />
+		<property name="description" value="竞足 半全场 比赛信息[start]" />
+	</bean>
+	<bean id="stopJzBqTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopJzBqMatchJob" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+		<property name="group" value="[JzBq]" />
+		<property name="description" value="竞足 半全场 比赛信息[end]" />
+	</bean>
+	<!-- 竞足 半全场 比赛信息  end -->
+
+</beans>

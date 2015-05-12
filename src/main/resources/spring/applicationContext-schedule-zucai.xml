@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
+	
+	<!-- 所用的执行计划  -->
+	<bean id="spiderScheduler"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+  				<ref bean="startZcSfcTrigger" />
+				<ref bean="stopZcSfcTrigger" />
+ 				<ref bean="startZcJq4Trigger" />
+				<ref bean="stopZcJq4Trigger" />
+				<ref bean="startZcZc6Trigger" />
+				<ref bean="stopZcZc6Trigger" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 足彩 胜负/任猜9场 比赛信息  start -->
+	<bean id="startZcSfcJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcSfcCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopZcSfcJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcSfcCrawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startZcSfcTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startZcSfcJob" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+	</bean>
+	<bean id="stopZcSfcTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopZcSfcJob" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+	</bean>
+	<!-- 足彩 胜负/任猜9场 比赛信息  start -->
+	
+	<!-- 足彩  四场进球   比赛信息  start -->
+	<bean id="startZcJq4Job"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcJq4Crawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopZcJq4Job"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcJq4Crawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startZcJq4Trigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startZcJq4Job" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+	</bean>
+	<bean id="stopZcJq4Trigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopZcJq4Job" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+	</bean>
+	<!-- 足彩   四场进球     比赛信息  start -->
+	
+	<!-- 足彩  六场半全场  比赛信息  start -->
+	<bean id="startZcZc6Job"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcZc6Crawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>startCrawl</value>
+		</property>
+	</bean>
+	<bean id="stopZcZc6Job"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="zcZc6Crawler"/>
+		</property>
+		<property name="targetMethod">
+			<value>stopCrawl</value>
+		</property>
+	</bean>
+	<bean id="startZcZc6Trigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="startZcZc6Job" />
+		<property name="cronExpression" value="0 0/5 * * * ?"/>
+	</bean>
+	<bean id="stopZcZc6Trigger"
+		class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="stopZcZc6Job" />
+		<property name="cronExpression" value="50 0/5 * * * ?"/>
+	</bean>
+	<!-- 足彩   六场半全场    比赛信息  start -->
+</beans>

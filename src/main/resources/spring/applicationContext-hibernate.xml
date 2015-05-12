@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">   
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/1000wcj?characterEncoding=UTF-8" />
+        <property name="username" value="root" />
+        <property name="password" value="1234" />
+        <!-- <property name="url" value="jdbc:mysql://58.64.213.201:3308/jj1000w?characterEncoding=UTF-8" />
+        <property name="username" value="jj1000w" />
+        <property name="password" value="jj1000w123" /> -->
+    </bean>
+    
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.use_outer_join">true</prop>
+				<prop key="hibernate.jdbc.fetch_size">50</prop>
+				<prop key="hibernate.jdbc.batch_size">25</prop>
+				<prop key="hibernate.transaction.flush_before_completion">true</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>hbm/BetDate.hbm.xml</value>
+				<value>hbm/FootballMatch.hbm.xml</value>
+				<value>hbm/WinningNumber.hbm.xml</value>
+				<value>hbm/ConstantConfig.hbm.xml</value>
+				<value>hbm/LotteryPeriod.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+
+</beans>
