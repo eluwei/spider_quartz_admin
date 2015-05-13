@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.json.JSONObject;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -14,7 +13,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * SchedulerController
+ * 针对Quartz 1.x编写，不支持Quartz 2.0 以上版本。
+ * 
+ * 对于Quartz 2.x 需要重新编写 SchedulerController
+ * 
+ * @author pingan
+ * @since  2015-05-13
+ */
+
 
 @Controller
 @RequestMapping("/scheduler")
@@ -103,44 +114,59 @@ public class SchedulerController {
 		return "editTrigger";
 	}
 
-	@RequestMapping(value = "/saveTrigger", method = RequestMethod.POST)
-	public void saveTrigger(String name, String group, String cronExpression, Model model)
+	@RequestMapping(value = "/saveTrigger",method = RequestMethod.POST, produces = { "application/json;charset=utf-8" })
+	@ResponseBody
+	public JsonResult saveTrigger(String name, String group, String cronExpression)
 			throws Exception {
-		JSONObject jo = new JSONObject();
+		JsonResult result = new JsonResult();
 		try {
 			CronTrigger cronTrigger = (CronTrigger) scheduler.getTrigger(name, group);
 			cronTrigger.setCronExpression(cronExpression);
 			
-			if(reSchedulerJob(cronTrigger))
-			{
-				jo.put("flag", "1");
-				jo.put("msg", "操作成功!");
+			if(reSchedulerJob(cronTrigger)){
+				result.setFlag("1");
+				result.setMsg("操作成功!");
+				
 			}else {
-				jo.put("flag", "-1");
-				jo.put("msg", "提示信息：任务无法重启");
+				result.setFlag("-1");
+				result.setMsg("提示信息：任务无法重启");
 			}
 		} catch (SchedulerException e) {
 			e.printStackTrace();
-			jo.put("flag", "-1");
-			jo.put("msg", "提示信息：" + e.getMessage());
+			result.setFlag("-1");
+			result.setMsg("提示信息：" + e.getMessage());
+		}
+		return result;
+	}
+	
+	private static class JsonResult{
+		private String flag;
+		private String msg;
+		public String getFlag() {
+			return flag;
+		}
+		public void setFlag(String flag) {
+			this.flag = flag;
+		}
+		public String getMsg() {
+			return msg;
+		}
+		public void setMsg(String msg) {
+			this.msg = msg;
 		}
 	}
 	
-	private boolean reSchedulerJob(Trigger trigger)
-	{
+	private boolean reSchedulerJob(Trigger trigger){
 		boolean rs = true;
-		try
-		{	
+		try{	
 			int status = scheduler.getTriggerState(trigger.getName(), trigger.getGroup());
 			scheduler.unscheduleJob(trigger.getName(), trigger.getGroup());
 			scheduler.scheduleJob(trigger);
-			if (status == 0)
-			{
+			if (status == 0){
 				scheduler.resumeTrigger(trigger.getName(), trigger.getGroup());
 			}
 		}
-		catch(SchedulerException e)
-		{
+		catch(SchedulerException e){
 			rs = false;
 			e.printStackTrace();
 		}
@@ -196,40 +222,4 @@ public class SchedulerController {
 		}
 		return mv;
 	}
-
-	private class TriggerModel{
-		private Trigger trigger = null;
-		private int status = 0;
-
-		public int getStatus() {
-			return status;
-		}
-		public void setStatus(int status) {
-			this.status = status;
-		}
-		public Trigger getTrigger() {
-			return trigger;
-		}
-		public void setTrigger(Trigger trigger) {
-			this.trigger = trigger;
-		}
-	}
-	
-	private class TriggerGroup {
-		private String groupName;
-		private List<TriggerModel> triggerModels;
-		public String getGroupName() {
-			return groupName;
-		}
-		public void setGroupName(String groupName) {
-			this.groupName = groupName;
-		}
-		public List<TriggerModel> getTriggerModels() {
-			return triggerModels;
-		}
-		public void setTriggerModels(List<TriggerModel> triggerModels) {
-			this.triggerModels = triggerModels;
-		}
-	}
-
 }
