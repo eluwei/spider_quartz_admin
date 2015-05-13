@@ -95,7 +95,7 @@
 				                	<button type="button" class="btn btn-warning btn-xs disabled" onclick="triggerOperate('trigger', 'name=${triggerModel.trigger.name}&group=${tiggerGroup.groupName}')">立即启动</button>
 				                	&nbsp;
 				                	<a role="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#editModal"
-				                		onclick="remoteUrl('/scheduler/editTrigger?name=${triggerModel.trigger.name}&group=${tiggerGroup.groupName}')">编辑</a>
+				                		onclick="remoteUrl('/scheduler/editTrigger.do?name=${triggerModel.trigger.name}&group=${tiggerGroup.groupName}')">编辑</a>
 				                </td>
 			            </tr>
 			            </#list>
@@ -121,7 +121,7 @@
 					</div>
 					<div class="panel panel-success">
 				        <div class="panel-heading">
-				            <h3 class="panel-title">常用表达式，<small><a href="http://www.hahuachou.com/cron/index.htm" target="_blank">在线cron表达式生成器</a></small></h3>
+				            <h3 class="panel-title">常用表达式，<small><a href="http://www.bejson.com/cronCreator/" target="_blank">在线cron表达式生成器</a></small></h3>
 				        </div>
 				        <div class="panel-body">
 				        <pre>
@@ -139,7 +139,7 @@
 0 15 10 15 * ? 		每月15日上午10:15触发 
 0 15 10 L * ? 		每月最后一日的上午10:15触发 
 0 15 10 ? * 6L 		每月的最后一个星期五上午10:15触发 
-0 15 10 ? * 6L 		2002-2005 2002年至2005年的每月的最后一个星期五上午10:15触发 
+0 15 10 ? * 6L 		2002年至2005年的每月的最后一个星期五上午10:15触发 
 0 15 10 ? * 6#3 	每月的第三个星期五上午10:15触发 
 						</pre>
 				        </div>

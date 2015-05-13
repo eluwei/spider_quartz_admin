@@ -1,18 +1,28 @@
 function schedulerOperate(operate){
 	if(operate == "run"){
-		location.href = "/scheduler/run";
+		$.get("/scheduler/run.do",function(result){
+			location.href = "/scheduler/";
+		});
 	}else if(operate == "stop"){
-		location.href = "/scheduler/stop";
+		$.get("/scheduler/stop.do",function(result){
+			location.href = "/scheduler/";
+		});
 	}
 }
 
 function triggerOperate(operate, param){
 	if(operate == "pause"){
-		location.href = "/scheduler/pauseTrigger?" + param;
+		$.get("/scheduler/pauseTrigger.do?" + param,function(result){
+			location.href = "/scheduler/";
+		});
 	}else if(operate == "resume"){
-		location.href = "/scheduler/resumeTrigger?" + param;
+		$.get("/scheduler/resumeTrigger.do?" + param,function(result){
+			location.href = "/scheduler/";
+		});
 	}else if(operate == "trigger"){
-		location.href = "/scheduler/triggerTrigger?" + param;
+		$.get("/scheduler/triggerTrigger.do?" + param,function(result){
+			location.href = "/scheduler/";
+		});
 	}
 }
 
@@ -30,13 +40,14 @@ function remoteUrl(u){
 function saveTrigger(){
 	$("#saveTriggerBtn").attr("disabled", "true");
 	$("#editTriggerForm").form("submit",{
-		url: "/scheduler/saveTrigger",
+		url: "/scheduler/saveTrigger.do",
 		success:function(json){
 	  		try{
+	  			alert(json);
 	  			eval("var data="+json);
             	alert(data.msg);
 	    		if(data.flag == "1"){ 
-	    	    	window.location.href = "/scheduler/";
+	    	    	location.href = "/scheduler/";
 	    		}else{
 	    			$("#saveTriggerBtn").attr("disabled", "false");
 	    		}
