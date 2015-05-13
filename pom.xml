@@ -11,24 +11,30 @@
   	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<jdk.version>1.6</jdk.version>
 	<spring.version>3.2.3.RELEASE</spring.version>
+	<jetty-version>8.1.3.v20120416</jetty-version>
   </properties>
 
   <dependencies>
-  <dependency>
+  
+  	<!-- quartz admin 需要依赖的 start -->
+  	<dependency>
     <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
         <version>2.3.20</version>
     </dependency>
-    <dependency>
-        <groupId>org.json</groupId>
-        <artifactId>json</artifactId>
-        <version>20140107</version>
-    </dependency>
+   	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.9.8</version>
+	</dependency>
     <dependency>
         <groupId>dom4j</groupId>
         <artifactId>dom4j</artifactId>
         <version>1.6.1</version>
     </dependency>
+    <!-- quartz admin 需要依赖的 end -->
+    
+    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -130,11 +136,6 @@
 	  <artifactId>hibernate-annotations</artifactId>
 	  <version>3.5.6-Final</version>
 	</dependency>
-<!-- 	<dependency>
-	    <groupId>org.hibernate</groupId>
-	    <artifactId>hibernate-core</artifactId>
-	    <version>4.1.9.Final</version>
-	</dependency> -->
 	<dependency>
 	  <groupId>net.sourceforge.htmlcleaner</groupId>
 	  <artifactId>htmlcleaner</artifactId>
@@ -190,82 +191,76 @@
 	  <artifactId>mysql-connector-java</artifactId>
 	  <version>5.1.18</version>
 	</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-context-support</artifactId>
-		    <version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-<!-- 		<dependency>
-		  <groupId>org.opensymphony.quartz</groupId>
-		  <artifactId>quartz</artifactId>
-		  <version>1.6.1</version>
-		</dependency> -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
-		</dependency>		
-		<dependency>
-			<groupId>org.opensymphony.quartz</groupId>
-			<artifactId>quartz-all</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-
-<!-- 	<dependency>
-	  <groupId>quartz</groupId>
-	  <artifactId>quartz</artifactId>
-	  <version>1.5.2</version>
-	</dependency> -->				
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context-support</artifactId>
+	    <version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-expression</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-orm</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-tx</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-test</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-web</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-webmvc</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+	  <groupId>org.springframework</groupId>
+	  <artifactId>spring-test</artifactId>
+	  <version>${spring.version}</version>
+	</dependency>		
+	<dependency>
+		<groupId>org.opensymphony.quartz</groupId>
+		<artifactId>quartz-all</artifactId>
+		<version>1.6.1</version>
+	</dependency>			
 	<dependency>
 	  <groupId>org.slf4j</groupId>
 	  <artifactId>slf4j-api</artifactId>
@@ -284,11 +279,6 @@ you no longer need to include specifically spring-asm since it has been included
 	  <artifactId>spring-asm</artifactId>
 	  <version>3.1.1.RELEASE</version>
 	</dependency> -->
-	<dependency>
-	  <groupId>org.springframework</groupId>
-	  <artifactId>spring-test</artifactId>
-	  <version>3.2.1.RELEASE</version>
-	</dependency>
 	
 	<dependency>
 	  <groupId>us.codecraft</groupId>
@@ -347,6 +337,20 @@ you no longer need to include specifically spring-asm since it has been included
 					<server>tomcat7</server>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty-version}</version>
+                <configuration>
+                    <contextPath>/</contextPath>
+                    <connectors>
+                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                            <port>8080</port>
+                            <maxIdleTime>60000</maxIdleTime>
+                        </connector>
+                    </connectors>
+                </configuration>
+            </plugin>
 		</plugins>
 		<resources>
 			<resource>
