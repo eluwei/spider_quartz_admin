@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
+	
+	<bean id="betDateJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="betDateJob"/>
+		</property>
+		<property name="targetMethod">
+			<value>doJob</value>
+		</property>
+	</bean>
+	<bean id="betDateJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="betDateJobDetail" />
+		<property name="cronExpression" value="0 52 9 * * ?"/>
+		<!-- <property name="cronExpression" value="0 0/2 * * * ?"/> -->
+		<property name="group" value="[BackUp]" />
+		<property name="description" value="设置历史比赛场数信息" />
+	</bean>
+	
+	
+	<bean id="footballMatchHistoryJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="footballMatchHistoryJob"/>
+		</property>
+		<property name="targetMethod">
+			<value>backupToHistory</value>
+		</property>
+	</bean>
+	<bean id="footballMatchHistoryTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="footballMatchHistoryJobDetail" />
+		<property name="cronExpression" value="0 52 9 * * ?"/>
+		<!-- <property name="cronExpression" value="30 0/2 * * * ?"/> -->
+		<property name="group" value="[BackUp]" />
+		<property name="description" value="备份比赛信息" />
+	</bean>
+	
+	 
+	
+	
+
+</beans>

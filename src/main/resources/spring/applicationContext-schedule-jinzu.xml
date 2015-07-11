@@ -27,6 +27,10 @@
 				<ref bean="stopZcJq4Trigger" />
 				<ref bean="startZcZc6Trigger" />
 				<ref bean="stopZcZc6Trigger" />
+				
+				<!-- 设置历史数据 -->
+				<ref bean="betDateJobTrigger" />
+				<ref bean="footballMatchHistoryTrigger" />
 			</list>
 		</property>
 	</bean>

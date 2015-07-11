@@ -6,13 +6,13 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">  
 	
 	<!-- 所用的执行计划  -->
-	<bean id="spiderScheduler"
+	<!-- <bean id="spiderScheduler"
 		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 	
 	<!-- 足彩 胜负/任猜9场 比赛信息  start -->
 	<bean id="startZcSfcJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
